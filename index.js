@@ -1,1 +1,1 @@
-module.exports = require('pathtore');
+module.exports = require('./pathtore');

@@ -1,5 +1,5 @@
 // Filename: pathtore.js
-// Timestamp: 2015.04.15-17:30:45 (last modified)  
+// Timestamp: 2015.04.15-17:46:42 (last modified)  
 
 /**
  * Expose `pathToRegexp`.
@@ -27,7 +27,7 @@ var PATH_REGEXP = new RegExp([
   '([\\/.])?(?:\\:(\\w+)(?:\\(((?:\\\\.|[^)])*)\\))?|\\(((?:\\\\.|[^)])*)\\))([+*?])?',
   // Match regexp special characters that are always escaped.
   '([.+*?=^!:${}()[\\]|\\/])'
-].join('|'), 'g')
+].join('|'), 'g');
 
 /**
  * Escape the capturing group by escaping special characters and meaning.
@@ -36,7 +36,7 @@ var PATH_REGEXP = new RegExp([
  * @return {String}
  */
 function escapeGroup (group) {
-  return group.replace(/([=!:$\/()])/g, '\\$1')
+  return group.replace(/([=!:$\/()])/g, '\\$1');
 }
 
 /**
@@ -47,8 +47,8 @@ function escapeGroup (group) {
  * @return {RegExp}
  */
 function attachKeys (re, keys) {
-  re.keys = keys
-  return re
+  re.keys = keys;
+  return re;
 }
 
 /**
@@ -58,7 +58,7 @@ function attachKeys (re, keys) {
  * @return {String}
  */
 function flags (options) {
-  return options.sensitive ? '' : 'i'
+  return options.sensitive ? '' : 'i';
 }
 
 /**
@@ -70,7 +70,7 @@ function flags (options) {
  */
 function regexpToRegexp (path, keys) {
   // Use a negative lookahead to match only capturing groups.
-  var groups = path.source.match(/\((?!\?)/g)
+  var groups = path.source.match(/\((?!\?)/g);
 
   if (groups) {
     for (var i = 0; i < groups.length; i++) {
@@ -79,11 +79,11 @@ function regexpToRegexp (path, keys) {
         delimiter: null,
         optional: false,
         repeat: false
-      })
+      });
     }
   }
 
-  return attachKeys(path, keys)
+  return attachKeys(path, keys);
 }
 
 /**
@@ -95,14 +95,14 @@ function regexpToRegexp (path, keys) {
  * @return {RegExp}
  */
 function arrayToRegexp (path, keys, options) {
-  var parts = []
+  var parts = [];
 
   for (var i = 0; i < path.length; i++) {
-    parts.push(pathToRegexp(path[i], keys, options).source)
+    parts.push(pathToRegexp(path[i], keys, options).source);
   }
 
-  var regexp = new RegExp('(?:' + parts.join('|') + ')', flags(options))
-  return attachKeys(regexp, keys)
+  var regexp = new RegExp('(?:' + parts.join('|') + ')', flags(options));
+  return attachKeys(regexp, keys);
 }
 
 /**
@@ -113,43 +113,43 @@ function arrayToRegexp (path, keys, options) {
  * @return {String}
  */
 function replacePath (path, keys) {
-  var index = 0
+  var index = 0;
 
   function replace (_, escaped, prefix, key, capture, group, suffix, escape) {
     if (escaped) {
-      return escaped
+      return escaped;
     }
 
     if (escape) {
-      return '\\' + escape
+      return '\\' + escape;
     }
 
-    var repeat = suffix === '+' || suffix === '*'
-    var optional = suffix === '?' || suffix === '*'
+    var repeat = suffix === '+' || suffix === '*';
+    var optional = suffix === '?' || suffix === '*';
 
     keys.push({
       name: key || index++,
       delimiter: prefix || '/',
       optional: optional,
       repeat: repeat
-    })
+    });
 
-    prefix = prefix ? ('\\' + prefix) : ''
-    capture = escapeGroup(capture || group || '[^' + (prefix || '\\/') + ']+?')
+    prefix = prefix ? ('\\' + prefix) : '';
+    capture = escapeGroup(capture || group || '[^' + (prefix || '\\/') + ']+?');
 
     if (repeat) {
-      capture = capture + '(?:' + prefix + capture + ')*'
+      capture = capture + '(?:' + prefix + capture + ')*';
     }
 
     if (optional) {
-      return '(?:' + prefix + '(' + capture + '))?'
+      return '(?:' + prefix + '(' + capture + '))?';
     }
 
     // Basic parameter support.
-    return prefix + '(' + capture + ')'
+    return prefix + '(' + capture + ')';
   }
 
-  return path.replace(PATH_REGEXP, replace)
+  return path.replace(PATH_REGEXP, replace);
 }
 
 /**
@@ -164,48 +164,47 @@ function replacePath (path, keys) {
  * @param  {Object}                [options]
  * @return {RegExp}
  */
-function pathToRegexp (path, keys, options) {
-  keys = keys || []
+return function pathToRegexp (path, keys, options) {
+  keys = keys || [];
 
   if (!Array.isArray(keys)) {
-    options = keys
-    keys = []
+    options = keys;
+    keys = [];
   } else if (!options) {
-    options = {}
+    options = {};
   }
 
   if (path instanceof RegExp) {
-    return regexpToRegexp(path, keys, options)
+    return regexpToRegexp(path, keys, options);
   }
 
   if (Array.isArray(path)) {
-    return arrayToRegexp(path, keys, options)
+    return arrayToRegexp(path, keys, options);
   }
 
-  var strict = options.strict
-  var end = options.end !== false
-  var route = replacePath(path, keys)
-  var endsWithSlash = path.charAt(path.length - 1) === '/'
+  var strict = options.strict;
+  var end = options.end !== false;
+  var route = replacePath(path, keys);
+  var endsWithSlash = path.charAt(path.length - 1) === '/';
 
   // In non-strict mode we allow a slash at the end of match. If the path to
   // match already ends with a slash, we remove it for consistency. The slash
   // is valid at the end of a path match, not in the middle. This is important
   // in non-ending mode, where "/test/" shouldn't match "/test//route".
   if (!strict) {
-    route = (endsWithSlash ? route.slice(0, -2) : route) + '(?:\\/(?=$))?'
+    route = (endsWithSlash ? route.slice(0, -2) : route) + '(?:\\/(?=$))?';
   }
 
   if (end) {
-    route += '$'
+    route += '$';
   } else {
     // In non-ending mode, we need the capturing groups to match as much as
     // possible by using a positive lookahead to the end or next path segment.
-    route += strict && endsWithSlash ? '' : '(?=\\/|$)'
+    route += strict && endsWithSlash ? '' : '(?=\\/|$)';
   }
 
-  return attachKeys(new RegExp('^' + route, flags(options)), keys)
+  return attachKeys(new RegExp('^' + route, flags(options)), keys);
 }
 
-return pathToRegexp;
+}());
 
-});
