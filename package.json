@@ -1,0 +1,14 @@
+{
+  "name": "pathtore",
+  "version": "0.0.1",
+  "license" : "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iambumblehead/pathtore.git"
+  },
+  "keywords": [
+    "path-to-regexp"
+  ],
+  "readmeFilename": "README.md",
+  "description": "pathtore is 'path-to-regexp' (from express) modified and repacked for browser use"
+}
