@@ -1,11 +1,18 @@
 {
   "name": "pathtore",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license" : "MIT",
-  "main": "pathtore.js",
+  "type": "module",
+  "main": "./pathtore.js",
+  "exports": {
+    "import": "./pathtore.js"
+  },
+  "files": [
+    "pathtore.js"
+  ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/iambumblehead/pathtore.git"
+    "url": "git+https://github.com/iambumblehead/pathtore.git"
   },
   "keywords": [
     "path-to-regexp"
