@@ -2,17 +2,12 @@ pathtore
 ========
 [MIT-license](#license)
 
-## OVERVIEW:
-
 pathtore is [path-to-regexp][10] (from express) modified and repacked for browser use.
 
-[0]: https://github.com/pillarjs/path-to-regexp
+[10]: https://github.com/pillarjs/path-to-regexp
 
----------------------------------------------------------
 
-### <a id="license">License:
-
-![scrounge](https://github.com/iambumblehead/scroungejs/raw/master/img/hand.png) 
+![scrounge](https://github.com/iambumblehead/scroungejs/raw/main/img/hand.png) 
 
 (The MIT License)
 

@@ -1,14 +1,8 @@
-// Filename: pathtore.js
-// Timestamp: 2015.04.15-17:46:42 (last modified)  
-
 /**
  * Expose `pathToRegexp`.
  */
-//module.exports = pathToRegexp
 
-var pathtore = ((typeof module === 'object') ? module : {}).exports = (function () {
-
-
+export default (function () {
 
 /**
  * The main path matching regexp utility.
